@@ -1,5 +1,9 @@
 module.exports = {
   css: {
-    requireModuleExtension: false
+    loaderOptions: {
+      css: {
+        modules: false
+      },
+    }
   }
 }
