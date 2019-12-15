@@ -62,7 +62,7 @@ export default {
       return jsyaml.load(data);
 		},
 
-    selectRandomPerson(data) {
+    selectRandomPerson(data = this.teamData) {
       return _.random(0, data.length-1);
 		},
 
