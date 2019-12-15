@@ -48,7 +48,10 @@ export default {
   computed: {
     buddy() {
       return _.get(this, `teamData[${this.selected}]`, {})
-    }
+		},
+		src() {
+			return `https://gitlab.com/gitlab-com/www-gitlab-com/raw/master/source/images/team/${_.get(this.buddy, 'picture', '')}`;
+		}
   },
 
 	methods: {
@@ -67,6 +70,8 @@ export default {
 		},
 
     async generate() {
+			if (!this.value) return;
+
 			this.loading = true;
 
       if (!this.cache) {
@@ -81,10 +86,11 @@ export default {
       const selectedVal = this.value;
       const filteredData = this.teamData.filter(buddy => buddy.departments.includes(selectedVal))
 			const buddy = filteredData[this.selectRandomPerson(filteredData)];
+			const prevSrc = this.src;
 
-			if (buddy) {
-				this.selected = this.teamData.indexOf(buddy);
-			}
+			if (buddy) this.selected = this.teamData.indexOf(buddy);
+
+			if (prevSrc === this.src) this.loading = false;
     },
 	},
 
@@ -114,6 +120,7 @@ export default {
 			</div>
 			<p>Please select buddy</p>
 			<button
+				aria-labelledby="Generate buddy"
 				:disabled="loading"
 				@click="generate"
 				:class="{'loading': loading}"
@@ -122,13 +129,16 @@ export default {
 			</button>
 		</article>
 
-		<article title="buddy" v-if="selected" class="selected-buddy">
-			<b>Your buddy is</b>
+		<article title="buddy" v-if="selected !== null" class="selected-buddy">
+			<span class="bold">Your buddy is</span>
 			<div class="image-container">
-				<img
+				<img v-show="loading" src="@/assets/ajax-loader.gif" alt="loading" aria-busy="true">
+				<img class="buddy-image"
+					v-show="!loading"
+					aria-busy="false"
 					@load="loading = false"
-					alt="buddy picture"
-					:src="`https://gitlab.com/gitlab-com/www-gitlab-com/raw/master/source/images/team/${buddy.picture}`" />
+					:alt="buddy.name"
+					:src="src" />
 			</div>
 			<a title="buddy link" :href="`https://gitlab.com/${buddy.gitlab}`" target="_blank" rel="noopener">{{ buddy.name }}</a>
 		</article>
