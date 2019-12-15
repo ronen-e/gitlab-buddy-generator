@@ -83,8 +83,7 @@ export default {
 				}
 			}
 
-      const selectedVal = this.value;
-      const filteredData = this.teamData.filter(buddy => buddy.departments.includes(selectedVal))
+      const filteredData = this.teamData.filter(buddy => buddy.departments.includes(this.value))
 			const buddy = filteredData[this.selectRandomPerson(filteredData)];
 			const prevSrc = this.src;
 
@@ -106,7 +105,7 @@ export default {
 	<main class="container">
 		<h1 class="title">Buddy Generator</h1>
 
-		<article title="instructions">
+		<article aria-roledescription="buddy generator">
 			<div>
 				<h2 class="sub-title">Department</h2>
 				<select v-model="value">
@@ -129,7 +128,7 @@ export default {
 			</button>
 		</article>
 
-		<article title="buddy" v-if="selected !== null" class="selected-buddy">
+		<article aria-roledescription="buddy" v-if="selected !== null" class="selected-buddy">
 			<span class="bold">Your buddy is</span>
 			<div class="image-container">
 				<img v-show="loading" src="@/assets/ajax-loader.gif" alt="loading" aria-busy="true">
@@ -148,11 +147,14 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-  padding: 0 80px;
+	padding: 0 80px;
+	max-width: 500px;
+	transition: all 0.25s
 }
 
 .title {
-  padding: $p16 0;
+	padding: $p16 0;
+	margin: 0;
 }
 
 .sub-title {
