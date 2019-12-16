@@ -4,10 +4,10 @@ import jsyaml from 'js-yaml';
 import _ from 'lodash';
 
 export default {
-  data() {
-    return {
-      cache: null,
-      teamData: [],
+	data() {
+		return {
+			cache: null,
+			teamData: [],
 			selected: null,
 			loading: false,
 			value: "Engineering Function",
@@ -42,39 +42,39 @@ export default {
 				"Security Department",
 				"Digital Marketing"
 			]			
-    }
-  },
+		}
+	},
 
-  computed: {
-    buddy() {
-      return _.get(this, `teamData[${this.selected}]`, {})
+	computed: {
+		buddy() {
+			return _.get(this, `teamData[${this.selected}]`, {})
 		},
 		src() {
 			return `https://gitlab.com/gitlab-com/www-gitlab-com/raw/master/source/images/team/${_.get(this.buddy, 'picture', '')}`;
 		}
-  },
+	},
 
 	methods: {
-    async getTeamData() {
-      const { data } = await axios.get(
-      `${'https://cors-anywhere.herokuapp.com/'}https://gitlab-frontend.surge.sh/team.yml`, {
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-        },
-      });
-      return jsyaml.load(data);
+		async getTeamData() {
+			const { data } = await axios.get(
+			`${'https://cors-anywhere.herokuapp.com/'}https://gitlab-frontend.surge.sh/team.yml`, {
+				headers: {
+					'X-Requested-With': 'XMLHttpRequest',
+				},
+			});
+			return jsyaml.load(data);
 		},
 
-    selectRandomPerson(data = this.teamData) {
-      return _.random(0, data.length-1);
+		selectRandomPerson(data = this.teamData) {
+			return _.random(0, data.length-1);
 		},
 
-    async generate() {
+		async generate() {
 			if (!this.value) return;
 
 			this.loading = true;
 
-      if (!this.cache) {
+			if (!this.cache) {
 				try {
 					this.teamData = await this.getTeamData();
 				} catch (e) {
@@ -83,21 +83,21 @@ export default {
 				}
 			}
 
-      const filteredData = this.teamData.filter(buddy => buddy.departments.includes(this.value))
+			const filteredData = this.teamData.filter(buddy => buddy.departments.includes(this.value))
 			const buddy = filteredData[this.selectRandomPerson(filteredData)];
 			const prevSrc = this.src;
 
 			if (buddy) this.selected = this.teamData.indexOf(buddy);
 
 			if (prevSrc === this.src) this.loading = false;
-    },
+		},
 	},
 
-  watch: {
-    teamData() {
-      this.cache = true;
-    }
-  }
+	watch: {
+		teamData() {
+			this.cache = true;
+		}
+	}
 }
 </script>
 
@@ -158,42 +158,42 @@ export default {
 }
 
 .sub-title {
-  padding-bottom: $p16;
+	padding-bottom: $p16;
 }
 
 article {
-  border: 1px solid #E5E5E5;
-  border-radius: 2px;
-  padding: $p16;
+	border: 1px solid #E5E5E5;
+	border-radius: 2px;
+	padding: $p16;
 }
 
 select {
-  height: $p32;
-  width: 320px;
-  max-width: 90%;
-  font-size: $p16;
-  margin-bottom: $p16;
+	height: $p32;
+	width: 320px;
+	max-width: 90%;
+	font-size: $p16;
+	margin-bottom: $p16;
 }
 
 .generate-btn {
 	background: #1AAA55;
-  margin-top: $p16;
-  color: white;
-  height: $p32;
-  font-size: $p16;
-  border: 1px solid #168F48;
+	margin-top: $p16;
+	color: white;
+	height: $p32;
+	font-size: $p16;
+	border: 1px solid #168F48;
 	border-radius: 5px;
 	cursor: pointer;
 }
 
 .selected-buddy {
-  margin-top: $p16;
+	margin-top: $p16;
 
-  .image-container {
-    display: inline-block;
-    width: $p32;
-    vertical-align: middle;
-    margin: 0 5px;
+	.image-container {
+		display: inline-block;
+		width: $p32;
+		vertical-align: middle;
+		margin: 0 5px;
 	}
 
 	img {
@@ -208,9 +208,9 @@ select {
 }
 
 @media only screen and (max-width: 600px) {
-  .container {
-    padding: 0 20px;
-  }
+	.container {
+		padding: 0 20px;
+	}
 }
 
 </style>
